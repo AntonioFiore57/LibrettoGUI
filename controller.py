@@ -1,13 +1,13 @@
-from view import View
-import Libretto
+import flet as ft
+import libretto
 from random import randint
-from itertools import permutations
+
 
 class Controller(object):
-    def __init__(self, view:View):
+    def __init__(self, view):
         self.view = view
-        self._model = Libretto.Libretto()
-        self.startUpLibretto()
+        self._model = libretto.Libretto()
+        self.startUpLibretto(10)
 
     def startUpLibretto(self, numero_esami:int):
         lst_esami = ['Analisi I', 'Analisi II', 'Fisica I',
@@ -16,19 +16,28 @@ class Controller(object):
                      'Musica II', 'Stora Alto Medioevo', 'Biologia', 'Elettronica'
                      ]
 
-        perm = permutations(iterable=lst_esami, r=numero_esami)
-        perm = list(perm)
-        i = randint(0, len(perm))
-        nomi_esami = perm[i]
+        indici = set()
+        while len(indici) != numero_esami:
+            i = randint(0, len(lst_esami)-1)
+            indici.add(i)
 
-        for nome_esame in nomi_esami:
-
+        for i in indici:
+            nome_esame = lst_esami[i]
             crediti = randint(5, 15)
             punteggio = randint(18, 30)
             lode = True if punteggio == 30 and crediti % 2 == 0 else False
             data = f"{randint(2000, 2023)}-{randint(1, 12)}-{randint(1, 28)}"
 
-            voto = Libretto.Voto(nome_esame, crediti, punteggio, lode, data)
+            voto = libretto.Voto(nome_esame, crediti, punteggio, lode, data)
 
             self._model.append(voto)
 
+    def _handleAdd(self, e):
+        pass
+    def _handlePrint(self, e):
+        self.view.lvElencoEsami.controls.clear()
+
+        for esame in self._model.esami:
+            self.view.lvElencoEsami.controls.append(  ft.Text(value= esame.__str__()) )
+        self.view.lvElencoEsami.update()
+        pass

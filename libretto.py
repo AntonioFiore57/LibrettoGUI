@@ -51,7 +51,6 @@ class Voto:
         """
         Costrusce la stringa in base al punteggio tenendo conto della lode
         :return: stringa rappresentativa del punteggio
-
         """
         return f"30 e lode" if self.punteggio == 30 and self.lode else f"{self.punteggio}"
 
@@ -61,12 +60,12 @@ class Voto:
 
 class Libretto:
     def __init__(self):
-        self.voti = []
+        self.esami = []
 
     def clona(self):
         nuovo = Libretto()
-        # nuovo.voti = copy.deepcopy(self.voti)
-        for v in self.voti:
+        # nuovo.esami = copy.deepcopy(self.esami)
+        for v in self.esami:
             nuovo.append(v.copy())
 
         return nuovo
@@ -74,8 +73,8 @@ class Libretto:
     def stampa(self):
         str_libretto = f""
 
-        if len(self.voti) != 0:
-            for v in self.voti:
+        if len(self.esami) != 0:
+            for v in self.esami:
                 str_libretto += f"{v.nome_esame} cfu: {v.cfu} voto: {v.str_punteggio()} data:{v.data}\n"
         else:
             str_libretto += f"Non ci sono esami\n"
@@ -89,7 +88,7 @@ class Libretto:
         :return: deepcopy del libretto con i voti migliorati
         """
         nuovo = self.clona()
-        for v in nuovo.voti:
+        for v in nuovo.esami:
             if (18 <= v.punteggio <= 23) or v.punteggio == 29:
                 v.punteggio += 1
             elif 24 <= v.punteggio <= 28:
@@ -110,14 +109,14 @@ class Libretto:
             raise ValueError("Voto già presente")
         if self.has_conflitto(voto):
             raise ValueError("Voto in conflitto")
-        self.voti.append(voto)
+        self.esami.append(voto)
 
-        for vv in self.voti:
+        for vv in self.esami:
             if vv.nome_esame == voto.nome_esame:
                 presente = True
                 break
         if not presente:
-            self.voti.append(voto)
+            self.esami.append(voto)
         return not presente
 
     def findByPunteggio(self, punteggio, lode):
@@ -133,7 +132,7 @@ class Libretto:
         if punteggio != 30 and lode:
             votiTrovati = []
         else:
-            votiTrovati = [voto for voto in self.voti if voto.punteggio == punteggio and voto.lode == lode]
+            votiTrovati = [voto for voto in self.esami if voto.punteggio == punteggio and voto.lode == lode]
         return votiTrovati
 
     def has_voto(self, voto):
@@ -148,7 +147,7 @@ class Libretto:
         """
 
         trovato = False
-        for v in self.voti:
+        for v in self.esami:
             if v.nome_esame == voto.nome_esame and v.punteggio == voto.punteggio and v.lode == voto.lode:
                 trovato = True
                 break
@@ -165,7 +164,7 @@ class Libretto:
         """
 
         conflitto = False
-        for v in self.voti:
+        for v in self.esami:
             if v.nome_esame == voto.nome_esame and (v.punteggio != voto.punteggio or v.lode != voto.lode):
                 conflitto = True
                 break
@@ -180,22 +179,22 @@ class Libretto:
         :return: oggetto voto
         """
         trovato = False
-        n = len(self.voti)
+        n = len(self.esami)
         for i in range(n - 1):
-            if self.voti[i].nome_esame == nomeEsame:
+            if self.esami[i].nome_esame == nomeEsame:
                 trovato = True
                 break
         if not trovato:
             raise ValueError("Nome esame non trovato")
 
-        return self.voti[i]
+        return self.esami[i]
 
     def media(self):
-        if len(self.voti) == 0:
+        if len(self.esami) == 0:
             raise ValueError("Elenco voti vuoto")
         somma_cfu = 0
         somma_punteggi = 0
-        for v in self.voti:
+        for v in self.esami:
             punto = 31 if v.lode else v.punteggio
             punto *= v.cfu
             somma_punteggi += punto
@@ -205,27 +204,27 @@ class Libretto:
 
     def crea_libretto_ordinato_per_nome(self):
         nuovo = self.clona()
-        # ordina i voti per nome
+        # ordina i esami per nome
         nuovo.ordina_per_nome()
 
         return nuovo
 
     def crea_libretto_ordinato_per_voto_desc(self):
         nuovo = self.clona()
-        # ordina i voti per nome
+        # ordina i esami per nome
         nuovo.ordina_per_voto_desc()
 
         return nuovo
 
     def ordina_per_nome(self):
-        self.voti.sort(key=operator.attrgetter('esame'))
+        self.esami.sort(key=operator.attrgetter('esame'))
 
     def ordina_per_voto_desc(self):
-        self.voti.sort(reverse=True)
+        self.esami.sort(reverse=True)
 
     def cancella_inferioriA(self, punteggio):
         nuovi = []
-        for v in self.voti:
+        for v in self.esami:
             if v.punteggio >= punteggio:
                 nuovi.append(v)
-        self.voti = nuovi
+        self.esami = nuovi
