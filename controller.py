@@ -35,6 +35,7 @@ class Controller(object):
     def _handleAdd(self, e):
         nome_esame = self.view.nome_esame.value
 
+
         pass
     def _handlePrint(self, e):
         self.view.lvElencoEsami.controls.clear()

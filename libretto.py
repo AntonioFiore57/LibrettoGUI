@@ -174,7 +174,7 @@ class Libretto:
     def findNomeEsame(self, nomeEsame):
         """
         Ricerca il nome dell'esame nella lista degli esami se viene trovato restituisce l'oggetto voto
-        corrispondente. In caso contrario la funzione solleva un'eccezione
+        corrispondente. In caso contrario la funzione restituisce None
         :param nomeEsame: stringa nome esame da cercare
         :return: oggetto voto
         """
@@ -185,7 +185,7 @@ class Libretto:
                 trovato = True
                 break
         if not trovato:
-            raise ValueError("Nome esame non trovato")
+            return None
 
         return self.esami[i]
 
