@@ -33,11 +33,13 @@ class Controller(object):
             self._model.append(voto)
 
     def _handleAdd(self, e):
+        nome_esame = self.view.nome_esame.value
+
         pass
     def _handlePrint(self, e):
         self.view.lvElencoEsami.controls.clear()
 
         for esame in self._model.esami:
-            self.view.lvElencoEsami.controls.append(  ft.Text(value= esame.__str__()) )
+            self.view.lvElencoEsami.controls.append(  ft.Text(value= esame) )
         self.view.lvElencoEsami.update()
         pass
