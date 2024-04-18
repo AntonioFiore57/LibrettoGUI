@@ -15,11 +15,21 @@ class View(object):
         self.nome_esame = None
         self.cfu = None
         self.ddPuntegggio = None
-        self.lode = None
+
         self.datePicker = None
         self.lvElencoEsami = None
         self.lblDataEsame = None
 
+        self.dlg_modal = ft.AlertDialog(
+            modal=True,
+
+            actions=[
+                ft.TextButton("OK", on_click=self.close_dlg),
+
+            ],
+            actions_alignment=ft.MainAxisAlignment.END,
+            on_dismiss=lambda e: print("Modal dialog dismissed!"),
+        )
     def carica_interfaccia(self):
         colonna = ft.Column([], alignment=ft.MainAxisAlignment.CENTER)
         # riga 1
@@ -52,7 +62,7 @@ class View(object):
         riga2 = ft.Row([self.nome_esame, self.cfu, self.ddPuntegggio, btnCalendario, self.lblDataEsame], alignment=ft.MainAxisAlignment.CENTER)
 
         # riga3
-        btnAdd = ft.ElevatedButton(text='Add', on_click=self._controller._handleAdd)
+        btnAdd = ft.ElevatedButton(text='Add', on_click=self.controllaCampi)
         btnPrint = ft.ElevatedButton(text='Print', on_click=self._controller._handlePrint)
         riga3 = ft.Row([btnAdd, btnPrint], alignment=ft.MainAxisAlignment.CENTER)
 
@@ -66,8 +76,27 @@ class View(object):
 
         self._page.add(colonna)
 
-        pass
+    def controllaCampi(self, e):
 
+        if self.nome_esame.value == '':
+            self.dlg_modal.title = ft.Text('ATTENZIONE - Nome esame')
+            self.dlg_modal.content=ft.Text("Il campo nome esame deve essere riempito")
+            self._page.dialog = self.dlg_modal
+            self.dlg_modal.open = True
+            self._page.update()
+            self.nome_esame.focus()
+
+        if self.ddPuntegggio.value == None:
+            self.dlg_modal.title = ft.Text('ATTENZIONE - punteggio')
+            self.dlg_modal.content = ft.Text("Il campo punteggio deve essere selezionato")
+            self._page.dialog = self.dlg_modal
+            self.dlg_modal.open = True
+            self._page.update()
+            self.ddPuntegggio.focus()
+
+    def close_dlg(self, e):
+        self.dlg_modal.open = False
+        self._page.update()
 
 
     def setController(self, c):
