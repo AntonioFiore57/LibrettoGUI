@@ -32,15 +32,33 @@ class Controller(object):
 
             self._model.append(voto)
 
-    def _handleAdd(self, e):
-        nome_esame = self.view.nome_esame.value
+    def _handleAdd(self):
+
+        if self.view.ddPuntegggio.value == '30L':
+            lode = True
+            punteggio = 30
+        else:
+            lode = False
+            punteggio = int(self.view.ddPuntegggio.value)
+
+        data = self.view.datePicker.value
+        dataEsame = f"{data.year}-{data.month}-{data.day}"
+
+        voto = libretto.Voto(
+            self.view.nome_esame.value,
+            self.view.cfu.value,
+            punteggio,
+            lode,
+            dataEsame
+
+        )
+        self._model.append(voto)
 
 
-        pass
     def _handlePrint(self, e):
         self.view.lvElencoEsami.controls.clear()
 
         for esame in self._model.esami:
             self.view.lvElencoEsami.controls.append(  ft.Text(value= esame) )
         self.view.lvElencoEsami.update()
-        pass
+

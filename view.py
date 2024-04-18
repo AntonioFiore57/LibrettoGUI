@@ -62,7 +62,7 @@ class View(object):
         riga2 = ft.Row([self.nome_esame, self.cfu, self.ddPuntegggio, btnCalendario, self.lblDataEsame], alignment=ft.MainAxisAlignment.CENTER)
 
         # riga3
-        btnAdd = ft.ElevatedButton(text='Add', on_click=self.controllaCampi)
+        btnAdd = ft.ElevatedButton(text='Add', on_click=self.handleAdd)
         btnPrint = ft.ElevatedButton(text='Print', on_click=self._controller._handlePrint)
         riga3 = ft.Row([btnAdd, btnPrint], alignment=ft.MainAxisAlignment.CENTER)
 
@@ -76,7 +76,7 @@ class View(object):
 
         self._page.add(colonna)
 
-    def controllaCampi(self, e):
+    def controllaCampi(self):
 
         if self.nome_esame.value == '':
             self.dlg_modal.title = ft.Text('ATTENZIONE - Nome esame')
@@ -85,6 +85,7 @@ class View(object):
             self.dlg_modal.open = True
             self._page.update()
             self.nome_esame.focus()
+            return False
 
         if self.ddPuntegggio.value == None:
             self.dlg_modal.title = ft.Text('ATTENZIONE - punteggio')
@@ -93,6 +94,14 @@ class View(object):
             self.dlg_modal.open = True
             self._page.update()
             self.ddPuntegggio.focus()
+            return False
+
+        return  True
+
+    def handleAdd(self, e):
+        if  self.controllaCampi():
+           self._controller._handleAdd()
+
 
     def close_dlg(self, e):
         self.dlg_modal.open = False
